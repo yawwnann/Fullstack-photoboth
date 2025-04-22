@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Gaya dasar tambahan atau override */
+body {
+  @apply bg-gray-100 font-sans antialiased; /* Contoh penggunaan @apply */
+  /* Atau bisa juga:
+     background-color: #f7fafc;
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+  */
+}
+
+/* Styling scrollbar (opsional, cross-browser mungkin butuh penyesuaian) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
