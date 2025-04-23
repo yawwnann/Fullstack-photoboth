@@ -25,3 +25,23 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Custom Overrides for Image Capture Compatibility */
+/* Anda perlu selector yang lebih spesifik, ini hanya contoh */
+.photobooth-frame {
+  /* Tambahkan kelas ini ke div terluar ImageFrame */
+  /* Contoh override untuk background slate-800 */
+  background-color: #1e293b !important;
+  /* Contoh override untuk border slate-700 */
+  border-color: #334155 !important;
+}
+
+.photobooth-frame .placeholder-slot {
+  /* Tambahkan kelas ini ke div placeholder */
+  /* Contoh override untuk background slate-700 */
+  background-color: #334155 !important;
+  /* Contoh override untuk border slate-600 */
+  border-color: #475569 !important;
+}
+
+/* Tambahkan override lain sesuai kebutuhan */

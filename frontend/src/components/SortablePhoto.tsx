@@ -1,15 +1,23 @@
+// client/src/components/SortablePhoto.tsx
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { FrameStyle } from "../App";
+import { FrameStyle } from "../config"; // Asumsi tipe diekspor
 
 interface SortablePhotoProps {
   id: number;
   url: string | null;
   frameStyle: FrameStyle;
+  aspectRatioClass: string; // Prop baru untuk kelas aspek rasio
 }
 
-export function SortablePhoto({ id, url, frameStyle }: SortablePhotoProps) {
+export function SortablePhoto({
+  id,
+  url,
+  frameStyle,
+  aspectRatioClass,
+}: SortablePhotoProps) {
+  // Tambah prop aspectRatioClass
   const {
     attributes,
     listeners,
@@ -42,7 +50,8 @@ export function SortablePhoto({ id, url, frameStyle }: SortablePhotoProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`relative touch-none aspect-[3/4] border  shadow-sm flex items-center justify-center overflow-hidden transition-all duration-300 group ${
+      // Terapkan aspectRatioClass yang diterima dari prop
+      className={`relative touch-none ${aspectRatioClass} border rounded-md shadow-sm flex items-center justify-center overflow-hidden transition-all duration-300 group ${
         url
           ? `border-black/10 dark:border-white/10 bg-slate-900`
           : "border-dashed border-slate-600 bg-slate-700"
@@ -53,7 +62,8 @@ export function SortablePhoto({ id, url, frameStyle }: SortablePhotoProps) {
           className={`absolute text-4xl font-light opacity-50 group-hover:opacity-80 transition-opacity ${placeholderClass}`}
           style={placeholderStyle}
         >
-          {id + 1}
+          {" "}
+          {id + 1}{" "}
         </span>
       )}
       {url && (
