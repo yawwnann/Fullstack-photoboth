@@ -147,14 +147,13 @@ const CameraCapture = forwardRef<CameraCaptureHandle, CameraCaptureProps>(
         {/* Overlay Countdown */}
         {countdownValue !== null &&
           countdownValue > 0 &&
-          !error && // Hanya tampil jika ada countdown & tidak error
-          +(
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          !error && ( // Pastikan kondisi ini ada
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none  bg-opacity-20 z-10">
               {" "}
-              {/* Sedikit overlay gelap */}
+              {/* z-10 ditambahkan untuk memastikan di atas video */}
               <span
-                className="text-white text-8xl md:text-9xl lg:text-[10rem] font-bold animate-pulse" // Animasi pulse
-                style={{ textShadow: "0 5px 20px rgba(0,0,0,0.9)" }} // Shadow teks
+                className="text-white text-8xl md:text-9xl lg:text-[10rem] font-bold animate-pulse"
+                style={{ textShadow: "0 5px 20px rgba(0,0,0,0.9)" }}
               >
                 {countdownValue}
               </span>

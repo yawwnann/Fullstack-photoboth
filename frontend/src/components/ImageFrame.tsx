@@ -1,26 +1,54 @@
 import React from "react";
+import { FrameStyle } from "../App"; // Asumsi tipe diekspor dari App.tsx
 
 interface ImageFrameProps {
   images: string[];
+  frameStyle: FrameStyle;
 }
 
 const ImageFrame = React.forwardRef<HTMLDivElement, ImageFrameProps>(
-  ({ images }, ref) => {
+  ({ images, frameStyle }, ref) => {
     const placeholders: (string | null)[] = Array(
       Math.max(0, 4 - images.length)
     ).fill(null);
     const displayImages: (string | null)[] = [...images, ...placeholders];
 
+    const frameClasses =
+      frameStyle.type === "preset"
+        ? `${frameStyle.bgClass} ${frameStyle.borderClass}`
+        : "";
+    const inlineStyle = frameStyle.type === "custom" ? frameStyle.style : {};
+
+    const placeholderStyle: React.CSSProperties = {};
+    if (frameStyle.type === "custom" && frameStyle.style.color) {
+      placeholderStyle.color = frameStyle.style.color;
+    }
+    const placeholderClass =
+      frameStyle.type === "preset"
+        ? frameStyle.textColor || "text-gray-500"
+        : "text-slate-600";
+
+    const footerTextColor =
+      frameStyle.type === "preset"
+        ? frameStyle.textColor || "text-gray-500"
+        : "";
+    const footerTextStyle =
+      frameStyle.type === "custom"
+        ? { color: frameStyle.style.color || "#6b7280" }
+        : {};
+
     return (
       <div
         ref={ref}
-        className="p-3 md:p-4 border-4 border-gray-800 bg-white shadow-lg w-[320px] sm:w-[400px] h-auto aspect-[3/4] mx-auto my-4 print:border-black print:shadow-none" // Style khusus print
+        className={`p-3 border-4 ${frameClasses} shadow-lg w-[300px] sm:w-[350px] h-auto aspect-[3/4] mx-auto my-4 rounded-lg flex flex-col`}
+        style={inlineStyle}
       >
-        <div className="grid grid-cols-2 gap-1.5 md:gap-2 w-full h-full">
+        <div className="grid grid-cols-2 gap-1.5 w-full flex-grow">
           {displayImages.map((imgSrc, index) => (
             <div
               key={index}
-              className="border border-gray-400 flex items-center justify-center bg-gray-100 aspect-square overflow-hidden print:border-gray-600"
+              // Rasio aspek potret 3:4 diterapkan di sini
+              className={`border border-black/10 dark:border-white/10  flex items-center justify-center bg-black/5 dark:bg-white/5 aspect-[3/4] overflow-hidden`}
             >
               {imgSrc ? (
                 <img
@@ -30,36 +58,31 @@ const ImageFrame = React.forwardRef<HTMLDivElement, ImageFrameProps>(
                   loading="lazy"
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center text-gray-400">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 mb-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
+                <div className="flex items-center justify-center">
+                  <span
+                    className={`text-4xl font-light opacity-50 ${placeholderClass}`}
+                    style={placeholderStyle}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span className="text-xs sm:text-sm">Slot {index + 1}</span>
+                    {index + 1}
+                  </span>
                 </div>
               )}
             </div>
           ))}
         </div>
-        {/* Anda bisa tambahkan logo/teks kecil di bawah jika diperlukan */}
-        {/* <div className="text-center text-xs text-gray-500 pt-2 print:text-black">
-         My Photobooth Event
-       </div> */}
+        {/* Teks Footer */}
+        <div className="pt-1 mt-auto text-center">
+          <p
+            className={`text-xs italic ${footerTextColor} opacity-75`}
+            style={footerTextStyle}
+          >
+            Yawwnan
+          </p>
+        </div>
       </div>
     );
   }
 );
 
 ImageFrame.displayName = "ImageFrame";
-
 export default ImageFrame;
