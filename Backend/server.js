@@ -1,39 +1,45 @@
-// Backend/server.js
+// Isi file: Backend/server.js
 const express = require("express");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 3001; // Port untuk server backend ini
+const PORT = process.env.PORT || 3001; // Port untuk server backend
 
-// __dirname di Node.js (CommonJS) merujuk ke direktori tempat file server.js berada (yaitu folder 'Backend')
-// Kita perlu naik satu level ('..') untuk mencapai root proyek, lalu masuk ke 'client/dist'
-const staticPath = path.join(__dirname, "..", "client", "dist");
+const staticPath = path.join(__dirname, "..", "frontend", "dist");
 
 console.log(`[Server Info] Mencoba menyajikan file statis dari: ${staticPath}`);
 
-// Middleware untuk menyajikan file statis
+// Middleware untuk menyajikan file statis dari frontend/dist
 app.use(express.static(staticPath));
 
-// Rute 'catch-all' (*) untuk Single Page Application (SPA) React
-// Semua permintaan yang tidak cocok dengan file statis akan diarahkan ke index.html
+// Rute catch-all untuk SPA: kirim index.html jika request tidak cocok file statis
 app.get("*", (req, res) => {
-  const indexPath = path.join(__dirname, "..", "client", "dist", "index.html");
+  const indexPath = path.join(
+    __dirname,
+    "..",
+    "frontend",
+    "dist",
+    "index.html"
+  );
   console.log(
     `[Server Info] Mengirim file: ${indexPath} untuk request ${req.path}`
   );
+
+  // Kirim file index.html
   res.sendFile(indexPath, (err) => {
+    // Penanganan error jika file tidak ditemukan atau masalah lain
     if (err) {
       console.error(`[Server Error] Gagal mengirim file index.html:`, err);
-      // Kirim respons error hanya jika header belum terkirim untuk menghindari error lanjutan
       if (!res.headersSent) {
-        // Cek apakah error karena file tidak ada
         if (err.code === "ENOENT") {
+          // Error spesifik jika index.html tidak ada
           res
             .status(404)
             .send(
-              "Halaman utama aplikasi tidak ditemukan. Pastikan Anda sudah menjalankan `npm run build` di folder `client`."
+              `File index.html tidak ditemukan di ${indexPath}. Pastikan Anda sudah menjalankan 'npm run build' di dalam folder 'frontend'.`
             );
         } else {
+          // Error server umum lainnya
           res
             .status(500)
             .send("Terjadi kesalahan internal saat memuat aplikasi.");
@@ -43,9 +49,11 @@ app.get("*", (req, res) => {
   });
 });
 
+// Jalankan server
 app.listen(PORT, () => {
   console.log(`=================================================`);
   console.log(`  Server backend berjalan di http://localhost:${PORT}`);
-  console.log(`  Melayani file dari folder ../client/dist`);
+  // Konfirmasi path yang dilayani
+  console.log(`  Melayani file dari folder ../frontend/dist`);
   console.log(`=================================================`);
 });
